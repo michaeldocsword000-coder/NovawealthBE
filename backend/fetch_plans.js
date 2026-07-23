@@ -6,7 +6,7 @@ function loginAndFetch() {
   const opts = {
     hostname: 'localhost',
     port: 5000,
-    path: '/api/auth/login',
+    path: 'novawealthbe.onrender.com/auth/login',
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(data) },
   };
@@ -21,7 +21,7 @@ function loginAndFetch() {
       const opts2 = {
         hostname: 'localhost',
         port: 5000,
-        path: '/api/admin/plans',
+        path: 'novawealthbe.onrender.com/admin/plans',
         method: 'GET',
         headers: { Authorization: 'Bearer ' + token },
       };
