@@ -11,11 +11,11 @@ const { createNotification } = require('../services/notification');
 const router = express.Router();
 const prisma = new PrismaClient();
 
-app.use(cors({
-  origin: 'https://novawealthglobal.onrender.com',
-  credentials: true,
-}));
+router.post(
+  '/register',
+  (req,res) => {});
 
+module.exports = router;
 app.use(express.json());
 
 app.use('/api/auth', router);

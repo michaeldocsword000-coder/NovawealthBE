@@ -28,7 +28,7 @@ if (!fs.existsSync(uploadsDir)) {
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL || 'https://novawealthglobal.onrender.com',
     credentials: true,
   })
 );
