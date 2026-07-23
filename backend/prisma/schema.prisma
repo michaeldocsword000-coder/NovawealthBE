@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id              String     @id @default(uuid())
+  email           String     @unique
+  username        String     @unique
+  password        String
+  firstName       String?
+  lastName        String?
+  profilePicture  String?
+  balance         Float      @default(0)
+  referralBonus   Float      @default(0)
+  referralCode    String     @unique
+  referredById    String?
+  referredBy      User?      @relation("Referrals", fields: [referredById], references: [id])
+  referrals       User[]     @relation("Referrals")
+  role            String     @default("USER")
+  status          String     @default("ACTIVE")
+  emailVerified   Boolean    @default(false)
+  verifyToken     String?
+  resetToken      String?
+  resetTokenExp   DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  deposits      Deposit[]
+  withdrawals   Withdrawal[]
+  investments   Investment[]
+  transactions  Transaction[]
+  notifications Notification[]
+  referralRecords Referral[] @relation("Referrer")
+  referredRecords Referral[] @relation("Referred")
+}
+
+model InvestmentPlan {
+  id           String   @id @default(uuid())
+  name         String
+  tier         Int      @unique
+  amount       Float
+  dailyProfit  Float
+  duration     Int
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  investments Investment[]
+}
+
+model Investment {
+  id              String           @id @default(uuid())
+  userId          String
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId          String
+  plan            InvestmentPlan   @relation(fields: [planId], references: [id])
+  amount          Float
+  dailyProfit     Float
+  duration        Int
+  daysCompleted   Int              @default(0)
+  totalEarned     Float            @default(0)
+  status          String           @default("ACTIVE")
+  startDate       DateTime         @default(now())
+  endDate         DateTime
+  lastProfitAt    DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model Deposit {
+  id            String        @id @default(uuid())
+  userId        String
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount        Float
+  senderName    String
+  reference     String?
+  screenshot    String?
+  status        String        @default("PENDING")
+  adminNote     String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Withdrawal {
+  id            String           @id @default(uuid())
+  userId        String
+  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount        Float
+  bankName      String
+  accountNumber String
+  accountName   String
+  status        String           @default("PENDING")
+  adminNote     String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+model Transaction {
+  id          String            @id @default(uuid())
+  userId      String
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        String
+  amount      Float
+  status      String            @default("COMPLETED")
+  description String
+  createdAt   DateTime          @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Referral {
+  id          String   @id @default(uuid())
+  referrerId  String
+  referrer    User     @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
+  referredId  String
+  referred    User     @relation("Referred", fields: [referredId], references: [id], onDelete: Cascade)
+  bonus       Float    @default(0)
+  createdAt   DateTime @default(now())
+}
