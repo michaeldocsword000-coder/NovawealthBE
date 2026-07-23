@@ -13,14 +13,6 @@ const prisma = new PrismaClient();
 
 router.post(
   '/register',
-  (req,res) => {});
-
-module.exports = router;
-app.use(express.json());
-
-app.use('/api/auth', router);
-router.post(
-  '/register',
   [
     body('email').isEmail().normalizeEmail(),
     body('username').isLength({ min: 3 }).trim(),
