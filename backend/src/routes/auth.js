@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const cors = require('cors');
 const { body } = require('express-validator');
 const { PrismaClient } = require('@prisma/client');
 const { generateToken, generateReferralCode, generateVerifyToken } = require('../utils/helpers');
@@ -10,6 +11,14 @@ const { createNotification } = require('../services/notification');
 const router = express.Router();
 const prisma = new PrismaClient();
 
+app.use(cors{
+  origin: 'https://novawealthglobal.onrender.com',
+  credentials: true,
+});
+
+app.use(express.json());
+
+app.use('/api/auth', router);
 router.post(
   '/register',
   [
