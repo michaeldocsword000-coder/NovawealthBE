@@ -42,26 +42,26 @@ const limiter = rateLimit({
   max: 100,
   message: { success: false, message: 'Too many requests, please try again later' },
 });
-app.use('novawealthbe.onrender.com/', limiter);
+app.use('/', limiter);
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,
   message: { success: false, message: 'Too many auth attempts' },
 });
-app.use('novawealthbe.onrender.com/auth/login', authLimiter);
-app.use('novawealthbe.onrender.com/auth/register', authLimiter);
+app.use('/auth/login', authLimiter);
+app.use('/auth/register', authLimiter);
 
-app.use('novawealthbe.onrender.com/auth', authRoutes);
-app.use('novawealthbe.onrender.com/user', userRoutes);
-app.use('novawealthbe.onrender.com/deposits', depositRoutes);
-app.use('novawealthbe.onrender.com/withdrawals', withdrawalRoutes);
-app.use('novawealthbe.onrender.com/investments', investmentRoutes);
-app.use('novawealthbe.onrender.com/transactions', transactionRoutes);
-app.use('novawealthbe.onrender.com/notifications', notificationRoutes);
-app.use('novawealthbe.onrender.com/admin', adminRoutes);
+app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
+app.use('/deposits', depositRoutes);
+app.use('/withdrawals', withdrawalRoutes);
+app.use('/investments', investmentRoutes);
+app.use('/transactions', transactionRoutes);
+app.use('/notifications', notificationRoutes);
+app.use('/admin', adminRoutes);
 
-app.get('novawealthbe.onrender.com/health', (req, res) => {
+app.get('/health', (req, res) => {
   res.json({ success: true, message: 'Blue Invest API is running' });
 });
 
